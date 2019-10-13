@@ -63,7 +63,6 @@ class DatabaseHelper{
 
   Future<List> getData() async{
 
-    log('ah gya');
     final response =
     await http.get('$serverUrl/user/', headers: {
           'Accept':'application/json',
