@@ -15,6 +15,7 @@ dependencies:
   shared_preferences: ^0.5.2+1
   connectivity: ^0.4.2
   dio: 3.0.0
+  toast: ^0.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -32,8 +32,7 @@ class DatabaseHelper{
 
   }
 
-  registerData(String name ,String email , String password) async{
-log(name + email);
+  registerData(String name ,String email ,String mobile , String password) async{
     String myUrl = "$serverUrl/register";
     final response = await  http.post(myUrl,
         headers: {
@@ -43,14 +42,16 @@ log(name + email);
           "usertype": "scrape yard",
           "name": "$name",
           "email": "$email",
-          "mobile": "77777777",
-          "password" : "abc123",
-          "c_password":"abc123"
+          "mobile": "$mobile",
+          "password" : "$password",
+          "c_password":"$password"
         } ) ;
     status = response.body.contains('error');
 
     var data = json.decode(response.body);
+var success = json.decode(data);
 
+log('ah gya : $success');
     if(status){
       print('data : ${data["error"]}');
     }else{

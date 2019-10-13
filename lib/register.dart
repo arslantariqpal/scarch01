@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login/controller/databasehelper.dart';
+import 'package:login/login.dart' as prefix0;
 import 'Login.dart';
 import 'dashboard.dart';
 
@@ -19,22 +20,44 @@ class RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _nameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _mobileController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
 
   _onPressed(){
     setState(() {
-      if(_emailController.text.trim().toLowerCase().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty ){
-        databaseHelper.registerData(_nameController.text.trim(),_emailController.text.trim().toLowerCase(),
-
-            _passwordController.text.trim()).whenComplete((){
+      if(
+      _nameController.text
+          .trim()
+          .toLowerCase()
+          .isNotEmpty &&
+          _emailController.text
+              .trim()
+              .toLowerCase()
+              .isNotEmpty &&
+          _mobileController.text
+              .trim()
+              .toLowerCase()
+              .isNotEmpty &&
+          _passwordController.text
+              .trim()
+              .isNotEmpty
+      )
+      {
+        databaseHelper.registerData(
+            _nameController.text.trim(),
+            _emailController.text.trim().toLowerCase(),
+            _mobileController.text.trim(),
+            _passwordController.text.trim()
+        ).whenComplete((){
           if(databaseHelper.status){
             _showDialog();
             msgStatus = 'Check email or password';
           }else{
-           Navigator.pushReplacementNamed(context, '/dashboard');
-
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Dashboard()),
+            );
           }
         });
       }
@@ -44,7 +67,6 @@ class RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Register',
       home: Scaffold(
@@ -76,6 +98,18 @@ class RegisterPageState extends State<RegisterPage> {
                     labelText: 'Email',
                     hintText: 'Place your email',
                     icon: new Icon(Icons.email),
+                  ),
+                ),
+              ),
+              Container(
+                height: 50,
+                child: new TextField(
+                  controller: _mobileController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    hintText: 'Place your Phone Number',
+                    icon: new Icon(Icons.phone),
                   ),
                 ),
               ),
@@ -120,20 +154,20 @@ class RegisterPageState extends State<RegisterPage> {
               new Padding(padding: new EdgeInsets.only(top: 44.0),),
               Container(
                 height: 50,
-                child: new FlatButton(
-                  onPressed: ()=>Navigator.of(context).push(
-                      new MaterialPageRoute(
-                        builder: (BuildContext context) => new LoginPage(),
-                      )
-                  )
 
-                  ,
-                  color: Colors.blue,
-                  child: new Text(
-                    'Login',
-                    style: new TextStyle(
-                      color: Colors.white,
-                    ),),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => prefix0.LoginPage()),
+                    );
+                  },
+                  padding: EdgeInsets.all(12),
+                  color: const Color(0xFFF2216C),
+                  child: Text('Log In', style: TextStyle(color: Colors.white)),
                 ),
               ),
             ],

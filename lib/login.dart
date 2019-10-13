@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login/dashboard.dart';
 import 'controller/databasehelper.dart';
 //import 'dashboard.dart';
 import 'register.dart';
@@ -56,7 +57,10 @@ initState(){
                 _showDialog();
                 msgStatus = 'Check email or password';
               }else{
-//                 Navigator.pushReplacementNamed(context, '/dashboard');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Dashboard()),
+                );
 
 
               }
