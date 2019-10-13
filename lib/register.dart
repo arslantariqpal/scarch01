@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login/controller/databasehelper.dart';
-
+import 'Login.dart';
 
 class RegisterPage extends StatefulWidget{
   static String tag = 'register-page';
@@ -123,7 +123,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: new FlatButton(
                   onPressed: ()=>Navigator.of(context).push(
                       new MaterialPageRoute(
-                        builder: (BuildContext context) => new RegisterPage(),
+                        builder: (BuildContext context) => new LoginPage(),
                       )
                   )
 

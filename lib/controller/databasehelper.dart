@@ -1,34 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 class DatabaseHelper{
-
-  String serverUrl = "http://scrash.codflux.com/api";
+  final serverUrl = "http://scrash.codflux.com/api";
   var status ;
   var statusCode;
   var token ;
 
   loginData(String email , String password) async{
-
-    String myUrl = "$serverUrl/login1";
-    final response = await  http.post(myUrl,
-        headers: {
-          'Accept':'application/json'
-        },
-        body: {
+    log('data: $email  $password 123');
+    final myUrl = "$serverUrl/login";
+    final response = await  http.post(myUrl
+        ,body: {
           "email": "$email",
           "password" : "$password"
         } ) ;
     status = response.body.contains('error');
 
     var data = json.decode(response.body);
-
+//log(myUrl);
     if(status){
-      print('data : ${data["error"]}');
+     _showDialog();
+      log('data : ${data["error"]}');
     }else{
-      print('data : ${data["token"]}');
+      log('data : ${data["token"]}');
       _save(data["token"]);
     }
 
@@ -39,12 +38,15 @@ class DatabaseHelper{
     String myUrl = "$serverUrl/register";
     final response = await  http.post(myUrl,
         headers: {
-          'Accept':'application/json'
+          'Accept':'application/json',
         },
         body: {
+          "usertype": "scrape yard",
           "name": "$name",
           "email": "$email",
-          "password" : "$password"
+          "mobile": "77777777",
+          "password" : "abc123",
+          "c_password":"abc123"
         } ) ;
     status = response.body.contains('error');
 
@@ -61,19 +63,18 @@ class DatabaseHelper{
 
   Future<List> getData() async{
 
-
+    log('ah gya');
     final response =
-    await http.get('http://scrash.codflux.com/api',
-        headers: {
+    await http.get('$serverUrl/user/', headers: {
           'Accept':'application/json',
-          'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwZjMzOTgwOGI3YmVjNTZkYjc2MDRmMjhjYzAyNDE0MjM3NWY0Y2JmZWQwMmFlNjgyNTJlMzFhMGQ3YWJiMzZkZDY2OWE5ZDViZGQ0YjkzIn0.eyJhdWQiOiIyIiwianRpIjoiNjBmMzM5ODA4YjdiZWM1NmRiNzYwNGYyOGNjMDI0MTQyMzc1ZjRjYmZlZDAyYWU2ODI1MmUzMWEwZDdhYmIzNmRkNjY5YTlkNWJkZDRiOTMiLCJpYXQiOjE1NzA2NTAyMjUsIm5iZiI6MTU3MDY1MDIyNSwiZXhwIjoxNjAyMjcyNjI1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.qKo8powch1fq3gWoBGdi0EEhZkYSwd2Waak2IYhCZoaZ0QMF5g7pJ0I_Db5h_3utxeSNLBPd8iiWb_dORdQWoCNAIdT6CNSDeK18cuDqx2XyF4ui5rWqY0xOI2zSyvVy1RzAZinRwAVeBprgsEzqUaBzZdopLbAFCymYoNksSOlApkk6CyplBmHUwJ4NeFkzeaY8V05OGjk7AkIJYG6GUPcgwzzZwGQngCZ87yMWuofGpOjqL-hIFJ9-YzUM6mqdzZLvb2okLCqHtn5YKeDfiuYumTI6xNTb2r_tOVKrv3bQYLNYUE3h626nZN-zCTlI8E_xO5U6GZkqQiDvStzAQWMP0eg5fkbf0_N0rOi39uSSbdNoRjtoU80_Q9RJyD8okogrZxOlukl4Z_FMh3wXXwL-PXLbepODYfPyP4-kTtOczXD7iSCYq5wK_TuZXlqunpDpM_C6aDEHDcDHB_0pYcN5Xs9UX5OkYl0HATTpzAVg4CIyRAdUhGPbW72dYYwwPqAAh4CyfWi-yyTEEHIpkRUOL9wWVzw9ILhnhYahleQYAbYMH7S23MYnL0-s_hGI1LcrlfefxFw1KdYBlVzEcHnXP2SF2c3yCzNPelfMU6fGXT2SOjuTEy8bCrao7cZn9u_58Dps--ZPxFzBnWh93gr7EAokoFxdf9lGYamy3Pw '
+          'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBkNTE1ODZkY2FkYzNiYjE3ODg1MDZkYzc4OWYxOTUxZTU5OTYzMDBjYzM0OWUxNjk5ZWVkNGY2MmNmMzgzM2U0NjJlN2RlODlkNjNlYmNjIn0.eyJhdWQiOiIxIiwianRpIjoiMGQ1MTU4NmRjYWRjM2JiMTc4ODUwNmRjNzg5ZjE5NTFlNTk5NjMwMGNjMzQ5ZTE2OTllZWQ0ZjYyY2YzODMzZTQ2MmU3ZGU4OWQ2M2ViY2MiLCJpYXQiOjE1NzA5MTc4NDcsIm5iZiI6MTU3MDkxNzg0NywiZXhwIjoxNjAyNTQwMjQ3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.WCreR17irTw5A1LIldUU8Bw1xJcgeXtTCKFRFisRWPHcOuaIK5Vl_BXFK5BSbZWsitYN0NEMQXVW-oBS8b2qtHvIBgncAtKKv-prnEfNr84C9_knEN6oOrk8__C1OM27_zXQ2hjy8H09BuSdKXn9qxAceBDjB7K_Ux0u10yUoqEfOMtVYDLx5jHxIYgSZHV74FbpPDS10cZNRZ-kJqOuwKhRZ3_jUDSe4Tncfh-qTupPuUDd-H4hWmvGKTaMjXo2QoIcIAtXvvH7CSkZbGN-4DMQhrjfk5n6CESbtUi02o0HCgPH678LcOSSUMSEOjutFP9Yrn3zJoVOgzs2Rh8BmV-aJslQSzoviX4CRCmTHBowPi-YFp5zxI8joL5A1Ye2Q-K8VRCZTkWkUUg1uEDolwPmONuDfz4ipN8jAFROMg15kZ2dBaPCBBixHE4uc5OcQ3NOOrPRqDXWM9tkyq77H91yUFxsrLq_lQt9Vp89EQskp3a9rrG9kwQaqCjzIsOK3UxxCu4v090zbn7bRFa_T9B8wvChx2S_tzkFvF5saXOuXx4f6ruQXAMR5vU2TG_8588A4aTx7JL-SPChemtLWIbv9Z40lxQepMZNgEqLgfJgrEJknsTgp_Rvj3yNgr_tiKncnxX4eDp0691EqOVu7E2Dco1OSHgp6hMzcBVbCGo'
         });
 
     if (response.statusCode == 200) {
-      // If server returns an OK response, parse the JSON.
+      // If the call to the server was successful, parse the JSON.
       return json.decode(response.body);
     } else {
-      // If that response was not OK, throw an error.
+      // If that call was not successful, throw an error.
       throw Exception('Failed to load post');
     }
 
@@ -81,21 +82,14 @@ class DatabaseHelper{
 //    final key = 'token';
 //    final value = prefs.get(key ) ?? 0;
 //
-//    String myUrl = "$serverUrl/user/";
+//    final myUrl = "$serverUrl/user/";
 //
-//    http.Response response = await http.get(myUrl,
+//     http.Response response = await http.get(myUrl,
 //        headers: {
 //          'Accept':'application/json',
-//          'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwZjMzOTgwOGI3YmVjNTZkYjc2MDRmMjhjYzAyNDE0MjM3NWY0Y2JmZWQwMmFlNjgyNTJlMzFhMGQ3YWJiMzZkZDY2OWE5ZDViZGQ0YjkzIn0.eyJhdWQiOiIyIiwianRpIjoiNjBmMzM5ODA4YjdiZWM1NmRiNzYwNGYyOGNjMDI0MTQyMzc1ZjRjYmZlZDAyYWU2ODI1MmUzMWEwZDdhYmIzNmRkNjY5YTlkNWJkZDRiOTMiLCJpYXQiOjE1NzA2NTAyMjUsIm5iZiI6MTU3MDY1MDIyNSwiZXhwIjoxNjAyMjcyNjI1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.qKo8powch1fq3gWoBGdi0EEhZkYSwd2Waak2IYhCZoaZ0QMF5g7pJ0I_Db5h_3utxeSNLBPd8iiWb_dORdQWoCNAIdT6CNSDeK18cuDqx2XyF4ui5rWqY0xOI2zSyvVy1RzAZinRwAVeBprgsEzqUaBzZdopLbAFCymYoNksSOlApkk6CyplBmHUwJ4NeFkzeaY8V05OGjk7AkIJYG6GUPcgwzzZwGQngCZ87yMWuofGpOjqL-hIFJ9-YzUM6mqdzZLvb2okLCqHtn5YKeDfiuYumTI6xNTb2r_tOVKrv3bQYLNYUE3h626nZN-zCTlI8E_xO5U6GZkqQiDvStzAQWMP0eg5fkbf0_N0rOi39uSSbdNoRjtoU80_Q9RJyD8okogrZxOlukl4Z_FMh3wXXwL-PXLbepODYfPyP4-kTtOczXD7iSCYq5wK_TuZXlqunpDpM_C6aDEHDcDHB_0pYcN5Xs9UX5OkYl0HATTpzAVg4CIyRAdUhGPbW72dYYwwPqAAh4CyfWi-yyTEEHIpkRUOL9wWVzw9ILhnhYahleQYAbYMH7S23MYnL0-s_hGI1LcrlfefxFw1KdYBlVzEcHnXP2SF2c3yCzNPelfMU6fGXT2SOjuTEy8bCrao7cZn9u_58Dps--ZPxFzBnWh93gr7EAokoFxdf9lGYamy3Pw '
+//          'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBkNTE1ODZkY2FkYzNiYjE3ODg1MDZkYzc4OWYxOTUxZTU5OTYzMDBjYzM0OWUxNjk5ZWVkNGY2MmNmMzgzM2U0NjJlN2RlODlkNjNlYmNjIn0.eyJhdWQiOiIxIiwianRpIjoiMGQ1MTU4NmRjYWRjM2JiMTc4ODUwNmRjNzg5ZjE5NTFlNTk5NjMwMGNjMzQ5ZTE2OTllZWQ0ZjYyY2YzODMzZTQ2MmU3ZGU4OWQ2M2ViY2MiLCJpYXQiOjE1NzA5MTc4NDcsIm5iZiI6MTU3MDkxNzg0NywiZXhwIjoxNjAyNTQwMjQ3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.WCreR17irTw5A1LIldUU8Bw1xJcgeXtTCKFRFisRWPHcOuaIK5Vl_BXFK5BSbZWsitYN0NEMQXVW-oBS8b2qtHvIBgncAtKKv-prnEfNr84C9_knEN6oOrk8__C1OM27_zXQ2hjy8H09BuSdKXn9qxAceBDjB7K_Ux0u10yUoqEfOMtVYDLx5jHxIYgSZHV74FbpPDS10cZNRZ-kJqOuwKhRZ3_jUDSe4Tncfh-qTupPuUDd-H4hWmvGKTaMjXo2QoIcIAtXvvH7CSkZbGN-4DMQhrjfk5n6CESbtUi02o0HCgPH678LcOSSUMSEOjutFP9Yrn3zJoVOgzs2Rh8BmV-aJslQSzoviX4CRCmTHBowPi-YFp5zxI8joL5A1Ye2Q-K8VRCZTkWkUUg1uEDolwPmONuDfz4ipN8jAFROMg15kZ2dBaPCBBixHE4uc5OcQ3NOOrPRqDXWM9tkyq77H91yUFxsrLq_lQt9Vp89EQskp3a9rrG9kwQaqCjzIsOK3UxxCu4v090zbn7bRFa_T9B8wvChx2S_tzkFvF5saXOuXx4f6ruQXAMR5vU2TG_8588A4aTx7JL-SPChemtLWIbv9Z40lxQepMZNgEqLgfJgrEJknsTgp_Rvj3yNgr_tiKncnxX4eDp0691EqOVu7E2Dco1OSHgp6hMzcBVbCGo'
 //        });
-//    if (myUrl) {
-//      // If server returns an OK response, parse the JSON.
-//      return json.decode(response.body);
-//    } else {
-//      // If that response was not OK, throw an error.
-//      throw Exception('Failed to load post');
-//    }
-   // return json.decode(response.body);
+//    return json.decode(response.body);
   }
 
   void deleteData(int id) async {
@@ -173,7 +167,29 @@ class DatabaseHelper{
     print('read : $value');
   }
 
-
+  void _showDialog() {
+    // flutter defined function
+    var context;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 
 

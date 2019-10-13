@@ -135,31 +135,6 @@ class ShowDataState extends State<ShowData> {
 
 
 
-  void _showDialog(){
-    showDialog(
-        context:context ,
-        builder:(BuildContext context){
-          return AlertDialog(
-            title: new Text('Failed'),
-            content:  new Text('Check your email or password'),
-            actions: <Widget>[
-              new RaisedButton(
-
-                child: new Text(
-                  'Close',
-                ),
-
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-
-              ),
-            ],
-          );
-        }
-    );
-  }
-
 
 
 }

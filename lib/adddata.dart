@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'controller/databasehelper.dart';
 import 'dashboard.dart';
-import 'register.dart';
 
 
 class AddData extends StatefulWidget{

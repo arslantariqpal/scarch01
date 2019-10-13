@@ -1,74 +1,45 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:login/signup_page.dart';
 
-Future<Post> fetchPost() async {
-  final response =
-  await http.get('https://jsonplaceholder.typicode.com/posts/1');
+import 'login.dart';
+import 'home_page.dart';
+import 'first_page.dart';
+import 'signup_page.dart';
+import 'register.dart';
+import 'showdata.dart';
+import 'dashboard.dart';
+import 'test_page.dart';
+import 'app.dart';
 
-  if (response.statusCode == 200) {
-    // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load post');
-  }
-}
-
-class Post {
-  final int userId;
-  final int id;
-  final String title;
-  final String body;
-
-  Post({this.userId, this.id, this.title, this.body});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-      body: json['body'],
-    );
-  }
-}
-
-void main() => runApp(MyApp(post: fetchPost()));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final Future<Post> post;
 
-  MyApp({Key key, this.post}) : super(key: key);
+  final routes = <String, WidgetBuilder>{
+    LoginPage.tag: (context) => LoginPage(),
+    HomePage.tag: (context) => HomePage(),
+    FirstPage.tag: (context) => FirstPage(),
+    SignupPage.tag: (context) => SignupPage(),
+    RegisterPage.tag: (context) => RegisterPage(),
+    ShowData.tag: (context) => ShowData(),
+    Dashboard.tag: (context) => Dashboard(),
+    TestPage.tag: (context) => TestPage(),
+    App.tag: (context) => App(),
+  };
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Fetch Data Example'),
-        ),
-        body: Center(
-          child: FutureBuilder<Post>(
-            future: post,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.title);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
 
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
+    return MaterialApp(
+      title: 'Kodeversitas',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.lightBlue,
+        fontFamily: 'Nunito',
       ),
+
+      home: TestPage(),
+      routes: routes,
     );
   }
 }

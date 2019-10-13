@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'controller/databasehelper.dart';
-import 'dashboard.dart';
+//import 'dashboard.dart';
 import 'register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginPage extends StatefulWidget{
-
+  static String tag = 'login-page';
   LoginPage({Key key , this.title}) : super(key : key);
   final String title;
 
@@ -22,13 +22,13 @@ class LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key ) ?? 0;
-    if(value != '0'){
-      Navigator.of(context).push(
-          new MaterialPageRoute(
-            builder: (BuildContext context) => new Dashboard(),
-          )
-      );
-    }
+//    if(value != '0'){
+//      Navigator.of(context).push(
+//          new MaterialPageRoute(
+//            builder: (BuildContext context) => new Dashboard(),
+//          )
+//      );
+//    }
   }
 
 @override
@@ -56,7 +56,7 @@ initState(){
                 _showDialog();
                 msgStatus = 'Check email or password';
               }else{
-                 Navigator.pushReplacementNamed(context, '/dashboard');
+//                 Navigator.pushReplacementNamed(context, '/dashboard');
 
 
               }
