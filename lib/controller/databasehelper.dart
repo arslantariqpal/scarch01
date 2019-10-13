@@ -12,7 +12,6 @@ class DatabaseHelper{
   var token ;
 
   loginData(String email , String password) async{
-    log('data: $email  $password 123');
     final myUrl = "$serverUrl/login";
     final response = await  http.post(myUrl
         ,body: {
@@ -34,7 +33,7 @@ class DatabaseHelper{
   }
 
   registerData(String name ,String email , String password) async{
-
+log(name + email);
     String myUrl = "$serverUrl/register";
     final response = await  http.post(myUrl,
         headers: {
@@ -56,6 +55,7 @@ class DatabaseHelper{
       print('data : ${data["error"]}');
     }else{
       print('data : ${data["token"]}');
+      log(data["token"]);
       _save(data["token"]);
     }
 

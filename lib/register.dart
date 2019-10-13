@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/controller/databasehelper.dart';
 import 'Login.dart';
+import 'dashboard.dart';
 
 class RegisterPage extends StatefulWidget{
   static String tag = 'register-page';
@@ -32,8 +33,7 @@ class RegisterPageState extends State<RegisterPage> {
             _showDialog();
             msgStatus = 'Check email or password';
           }else{
-            Navigator.pushReplacementNamed(context, '/dashboard');
-
+           Navigator.pushReplacementNamed(context, '/dashboard');
 
           }
         });

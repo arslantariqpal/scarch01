@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
       ),
 
-      home: TestPage(),
+      home: RegisterPage(),
       routes: routes,
     );
   }
