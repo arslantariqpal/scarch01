@@ -56,7 +56,7 @@ class ShowDataState extends State<ShowData> {
               Container(
                 height: 50,
                 child: new Text(
-                  " Price : ${widget.list[widget.index]['price']}",
+                  " Price : ${widget.list[widget.index]['email']}",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontWeight: FontWeight.bold),

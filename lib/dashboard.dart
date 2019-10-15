@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'controller/databasehelper.dart';
+import 'login.dart';
 
+import 'adddata.dart';
 import 'showdata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,35 +40,35 @@ class DashboardState extends State<Dashboard> {
         appBar: AppBar(
           title:  Text('Dashboard'),
           actions: <Widget>[
-//            IconButton(
-//              icon: Icon(Icons.cancel),
-//              onPressed: (){
-//                _save('0');
-//                Navigator.of(context).push(
-//                    new MaterialPageRoute(
-//                      builder: (BuildContext context) => new LoginPage(),
-//                    )
-//                );
-//              },
-//            )
+            IconButton(
+              icon: Icon(Icons.cancel),
+              onPressed: (){
+                _save('0');
+                Navigator.of(context).push(
+                    new MaterialPageRoute(
+                      builder: (BuildContext context) => new LoginPage(),
+                    )
+                );
+              },
+            )
           ],
         ),
-//        floatingActionButton: new FloatingActionButton(
-//          child: new Icon(Icons.add),
-//          onPressed: ()=>Navigator.of(context).push(
-//              new MaterialPageRoute(
-//                builder: (BuildContext context) => new AddData(),
-//              )
-//          ),
-//        ),
+        floatingActionButton: new FloatingActionButton(
+          child: new Icon(Icons.add),
+          onPressed: ()=>Navigator.of(context).push(
+              new MaterialPageRoute(
+                builder: (BuildContext context) => new AddData(),
+              )
+          ),
+        ),
         body: new FutureBuilder<List>(
-          future: databaseHelper.getData(),
+          /*future: databaseHelper.getData(),
           builder: (context ,snapshot){
             if(snapshot.hasError) print(snapshot.error);
             return snapshot.hasData
                 ? new ItemList(list: snapshot.data)
                 : new Center(child: new CircularProgressIndicator(),);
-          },
+          },*/
         )
       ),
     );
@@ -97,7 +99,7 @@ class ItemList extends StatelessWidget {
               child: new ListTile(
                 title: new Text(list[i]['name']),
                 leading: new Icon(Icons.apps),
-                subtitle: new Text('Price : ${list[i]['price']}'),
+                subtitle: new Text('email : ${list[i]['email']}'),
               ),
             )
             ,
